@@ -4,8 +4,10 @@ const nextConfig = {
     '@noble/hashes',
     '@noble/curves', 
     '@coinbase/coinbase-sdk',
+    '@coinbase/cdp-sdk',
     '@coinbase/agentkit',
     'viem',
+    'jose',
   ],
 };
 
