@@ -1,9 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ['@noble/hashes', '@noble/curves', 'viem'],
-  },
-  turbopack: {},
+  serverExternalPackages: [
+    '@noble/hashes',
+    '@noble/curves', 
+    '@coinbase/coinbase-sdk',
+    '@coinbase/agentkit',
+    'viem',
+  ],
 };
 
 export default nextConfig;
