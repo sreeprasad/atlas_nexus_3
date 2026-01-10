@@ -66,7 +66,7 @@ export async function prepareAgentkitAndWalletProvider(): Promise<{
   agentkit: AgentKit;
   walletProvider: WalletProvider;
 }> {
-  if (!process.env.CDP_API_KEY_ID || !process.env.CDP_API_KEY_SECRET) {
+  if (!process.env.CDP_API_KEY_ID) {
     throw new Error(
       "I need both CDP_API_KEY_ID and CDP_API_KEY_SECRET in your .env file to connect to the Coinbase Developer Platform.",
     );
@@ -91,11 +91,17 @@ export async function prepareAgentkitAndWalletProvider(): Promise<{
   }
 
   try {
-    // Initialize WalletProvider: https://docs.cdp.coinbase.com/agentkit/docs/wallet-management
+    
+
+    const apiKeySecret = process.env.CDP_API_KEY_SECRET;
+    const walletSecret = process.env.CDP_WALLET_SECRET;
+    console.log("API Key Secret:", apiKeySecret);
+    console.log("Wallet Secret:", walletSecret);
+ 
     const walletProvider = await CdpSmartWalletProvider.configureWithWallet({
       apiKeyId: process.env.CDP_API_KEY_ID,
-      apiKeySecret: process.env.CDP_API_KEY_SECRET,
-      walletSecret: process.env.CDP_WALLET_SECRET,
+      apiKeySecret: apiKeySecret,
+      walletSecret: walletSecret,
       networkId: process.env.NETWORK_ID || "base-sepolia",
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       owner: owner as any,

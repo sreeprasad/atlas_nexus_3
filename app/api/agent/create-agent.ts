@@ -1,45 +1,22 @@
 import { openai } from "@ai-sdk/openai";
 import { getVercelAITools } from "@coinbase/agentkit-vercel-ai-sdk";
 import { prepareAgentkitAndWalletProvider } from "./prepare-agentkit";
+import { atlasNexusTools } from "@/lib/atlas-nexus-tools";
 
 /**
- * Agent Configuration Guide
- *
- * This file handles the core configuration of your AI agent's behavior and capabilities.
- *
- * Key Steps to Customize Your Agent:
- *
- * 1. Select your LLM:
- *    - Modify the `openai` instantiation to choose your preferred LLM
- *    - Configure model parameters like temperature and max tokens
- *
- * 2. Instantiate your Agent:
- *    - Pass the LLM, tools, and memory into `createReactAgent()`
- *    - Configure agent-specific parameters
+ * Atlas Nexus Agent Configuration
  */
 
-// The agent
 type Agent = {
   tools: ReturnType<typeof getVercelAITools>;
   system: string;
   model: ReturnType<typeof openai>;
   maxSteps?: number;
 };
+
 let agent: Agent;
 
-/**
- * Initializes and returns an instance of the AI agent.
- * If an agent instance already exists, it returns the existing one.
- *
- * @function getOrInitializeAgent
- * @returns {Promise<ReturnType<typeof createReactAgent>>} The initialized AI agent.
- *
- * @description Handles agent setup
- *
- * @throws {Error} If the agent initialization fails.
- */
 export async function createAgent(): Promise<Agent> {
-  // If agent has already been initialized, return it
   if (agent) {
     return agent;
   }
@@ -51,31 +28,55 @@ export async function createAgent(): Promise<Agent> {
   const { agentkit, walletProvider } = await prepareAgentkitAndWalletProvider();
 
   try {
-    // Initialize LLM: https://platform.openai.com/docs/models#gpt-4o
     const model = openai("gpt-4o-mini");
 
-    // Initialize Agent
     const canUseFaucet = walletProvider.getNetwork().networkId == "base-sepolia";
     const faucetMessage = `If you ever need funds, you can request them from the faucet.`;
     const cantUseFaucetMessage = `If you need funds, you can provide your wallet details and request funds from the user.`;
+
     const system = `
-        You are a helpful agent that can interact onchain using the Coinbase Developer Platform AgentKit. You are 
-        empowered to interact onchain using your tools. ${canUseFaucet ? faucetMessage : cantUseFaucetMessage}.
-        Before executing your first action, get the wallet details to see what network 
-        you're on. If there is a 5XX (internal) HTTP error code, ask the user to try again later. If someone 
-        asks you to do something you can't do with your currently available tools, you must say so, and 
-        explain that they can add more capabilities by adding more action providers to your AgentKit configuration.
-        ALWAYS include this link when mentioning missing capabilities, which will help them discover available action providers: https://github.com/coinbase/agentkit/tree/main/typescript/agentkit#action-providers
-        If users require more information regarding CDP or AgentKit, recommend they visit docs.cdp.coinbase.com for more information.
-        Be concise and helpful with your responses. Refrain from restating your tools' descriptions unless it is explicitly requested.
-        `;
-    const tools = getVercelAITools(agentkit);
+You are an Orchestrator Agent in the Atlas Nexus - a decentralized marketplace where AI agents discover and pay each other for services.
+
+## Your Capabilities
+
+### 1. Wallet Operations
+You have a CDP Smart Wallet for onchain transactions. ${canUseFaucet ? faucetMessage : cantUseFaucetMessage}
+Always check your wallet details first to know your address and balance.
+
+### 2. Agent Discovery (Atlas Nexus)
+You can discover other agents using semantic search:
+- Use discover_agents to find agents by describing what capability you need
+- Use list_agents to see all registered agents
+- Use register_agent to register new agents in the marketplace
+
+### 3. Agent Payments (x402 Protocol)
+When you call another agent's API and receive a 402 Payment Required response:
+1. Parse the payment requirements (amount, currency, destination wallet)
+2. Execute the payment using your wallet
+3. Retry the request with the transaction hash
+4. Log the transaction using log_transaction
+
+## Guidelines
+- Be concise and helpful
+- Always verify you have sufficient funds before attempting payments
+- Log all inter-agent transactions for auditability
+- If you can't find an agent with the needed capability, suggest the user register one
+
+For more info on AgentKit capabilities: https://github.com/coinbase/agentkit
+`;
+
+    // Get AgentKit tools and merge with Atlas Nexus tools
+    const agentKitTools = getVercelAITools(agentkit);
+    const tools = {
+      ...agentKitTools,
+      ...atlasNexusTools,
+    };
 
     agent = {
       tools,
       system,
       model,
-      maxSteps: 10,
+      maxSteps: 15,
     };
 
     return agent;
