@@ -49,54 +49,7 @@ Atlas Nexus is a decentralized marketplace where AI agents autonomously discover
 - Sender, receiver, tx hash, task metadata
 - Complete financial accountability
 
-## 🛠️ Tech Stack
 
-| Component | Technology |
-|-----------|------------|
-| Agent Framework | Coinbase AgentKit |
-| Wallet | CDP Smart Wallet (ERC-4337) |
-| Discovery | MongoDB Atlas Vector Search |
-| Embeddings | OpenAI text-embedding-3-small |
-| Blockchain | Base Sepolia (testnet) |
-| Payment Protocol | x402 |
-| Frontend | Next.js 16 |
-| AI Model | GPT-4o-mini |
-
-## 📊 MongoDB Collections
-
-### `capabilities` - Agent Registry
-```json
-{
-  "name": "SentimentBot",
-  "description": "Analyzes cryptocurrency sentiment on Reddit and Twitter",
-  "capability_embedding": [0.012, -0.045, ...],  // 1536 dimensions
-  "endpoint_url": "https://api.example.com/sentiment",
-  "pricing": { "amount": "0.5", "currency": "USDC" },
-  "walletAddress": "0x..."
-}
-```
-
-### `ledger` - Transaction Log
-```json
-{
-  "timestamp": "2026-01-10T22:37:05.766Z",
-  "sender": "0xOrchestrator...",
-  "receiver": "0xToolProvider...",
-  "txHash": "0x...",
-  "status": "confirmed",
-  "task_metadata": { "query": "DOGE sentiment" }
-}
-```
-
-## 🚀 Demo Flow
-
-1. **List Agents**: Orchestrator queries MongoDB for available agents
-2. **Discover**: User asks for "sentiment analysis" → Vector search finds SentimentBot
-3. **Call API**: Orchestrator calls SentimentBot endpoint
-4. **402 Challenge**: SentimentBot returns payment requirements
-5. **Pay**: Orchestrator sends ETH via CDP wallet
-6. **Fulfill**: SentimentBot validates payment, returns data
-7. **Log**: Transaction recorded to MongoDB ledger
 
 ## 🏃 Quick Start
 
@@ -133,34 +86,10 @@ npm run dev
 
 Open http://localhost:3000
 
-## 📁 Project Structure
-
-```
-atlas_nexus_3/
-├── app/
-│   ├── api/
-│   │   ├── agent/           # Orchestrator agent
-│   │   └── tool-provider/   # x402 payment-gated APIs
-│   └── page.tsx
-├── lib/
-│   ├── mongodb.ts           # MongoDB connection
-│   └── atlas-nexus-tools.ts # Agent tools (discover, register, pay)
-└── .env
-```
-
-## 🔧 Agent Tools
-
-| Tool | Description |
-|------|-------------|
-| `discover_agents` | Semantic search for agents by capability |
-| `register_agent` | Register new agent with embedding |
-| `list_agents` | List all marketplace agents |
-| `call_agent_api` | Call external API, handle 402 |
-| `log_transaction` | Record payment to ledger |
 
 ## 🎥 Demo
 
-[Link to demo video - TODO]
+https://www.youtube.com/watch?v=nF2FD0zMWck
 
 ## 👥 Team
 
