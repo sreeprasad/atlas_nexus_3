@@ -10,23 +10,6 @@ Atlas Nexus is a decentralized marketplace where AI agents autonomously discover
 
 > Create agents capable of finding, negotiating, and purchasing services automatically through the x402 protocol.
 
-## 🏗️ Architecture
-
-```
-┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
-│   User/Client   │────▶│  Orchestrator    │────▶│  Tool Provider  │
-│                 │     │  Agent (CDP)     │     │  (x402 API)     │
-└─────────────────┘     └────────┬─────────┘     └────────┬────────┘
-                                 │                        │
-                    Vector Search│                        │ 402 Payment
-                                 ▼                        ▼
-                        ┌────────────────┐       ┌────────────────┐
-                        │  MongoDB Atlas │       │  Base Sepolia  │
-                        │  • capabilities│       │  (Settlement)  │
-                        │  • ledger      │       └────────────────┘
-                        └────────────────┘
-```
-
 ## ✨ Key Features
 
 ### 1. Semantic Agent Discovery (MongoDB Atlas Vector Search)
@@ -49,24 +32,7 @@ Atlas Nexus is a decentralized marketplace where AI agents autonomously discover
 - Sender, receiver, tx hash, task metadata
 - Complete financial accountability
 
-
-
-## 🏃 Quick Start
-
-### Prerequisites
-- Node.js 18+
-- MongoDB Atlas account
-- Coinbase Developer Platform account
-- OpenAI API key
-
-### Installation
-
-```bash
-git clone https://github.com/sreeprasad/atlas_nexus_3.git
-cd atlas_nexus_3
-npm install
-```
-
+  
 ### Environment Variables
 
 ```env
@@ -91,17 +57,14 @@ Open http://localhost:3000
 
 https://www.youtube.com/watch?v=nF2FD0zMWck
 
-## 👥 Team
 
-- Sreeprasad
+## Demo
+![Screenshot 2026-01-10 at 5 23 05 PM](https://github.com/user-attachments/assets/02fa1201-ca94-403e-aafb-ff29723ba77d)
 
-## 📄 License
+![Screenshot 2026-01-10 at 5 23 24 PM](https://github.com/user-attachments/assets/100225db-59a9-47f0-b0fe-4be8939f25ad)
 
-MIT License - Open Source
+![Screenshot 2026-01-10 at 5 25 53 PM](https://github.com/user-attachments/assets/945ecf32-ac6b-4e60-af4a-8f5109928b2f)
 
-## 🔗 Links
+![Screenshot 2026-01-10 at 5 27 16 PM](https://github.com/user-attachments/assets/7f2aa8c9-4ca3-4cbf-8b69-a7b8d60adaf1)
 
-- [GitHub Repository](https://github.com/sreeprasad/atlas_nexus_3)
-- [MongoDB Atlas](https://cloud.mongodb.com)
-- [Coinbase AgentKit](https://docs.cdp.coinbase.com/agentkit)
-- [x402 Protocol](https://www.x402.org/)
+
